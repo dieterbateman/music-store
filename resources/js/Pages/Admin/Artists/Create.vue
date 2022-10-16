@@ -1,15 +1,16 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/inertia-vue3';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/inertia-vue3";
+import CreateModal from '@/Components/CreateModal.vue';
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head title="Admin" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                My Music
+                Admin Artist Create
             </h2>
         </template>
 
@@ -18,8 +19,10 @@ import { Head } from '@inertiajs/inertia-vue3';
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <h1 class="text-xl">
-                        You're logged in! And this is the dashboard.
+                            This is the admin home page to create new artist.
                         </h1>
+                        <br>
+                        <create-modal></create-modal>
                     </div>
                 </div>
             </div>

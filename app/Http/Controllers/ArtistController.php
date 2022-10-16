@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class AdminController extends Controller
+class ArtistController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return 'Admin';
+        return Inertia::render('Admin/Artists/Home');
     }
 
     /**
@@ -23,7 +24,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Artists/Create');
     }
 
     /**
