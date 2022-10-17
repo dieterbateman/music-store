@@ -30,7 +30,7 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Music
                                 </NavLink>
-                                <NavLink v-if="$page.props.auth.user.is_admin" :href="route('artists.home')" :active="route().current('artists.home') || route().current('artists.create')" >
+                                <NavLink v-if="$page.props.auth.user.is_admin" :href="route('artists.index')" :active="route().current('artists.index')" >
                                     Artists
                                 </NavLink>
                             </div>

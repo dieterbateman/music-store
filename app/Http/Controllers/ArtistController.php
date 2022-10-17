@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
+use App\Models\artists;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+
+
 
 class ArtistController extends Controller
 {
@@ -14,7 +18,13 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Admin/Artists/Home');
+        return Inertia::render('Admin/Artists/Home',[
+            'artists'=>Artist::all()->map(function($artist){
+                return [
+                    'name'=>$artist->name
+                ];
+            })
+        ]);
     }
 
     /**
@@ -24,7 +34,7 @@ class ArtistController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Artists/Create');
+        
     }
 
     /**
@@ -35,7 +45,9 @@ class ArtistController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Artist::create([
+            'name'=>$request->name
+        ]);
     }
 
     /**
