@@ -37,8 +37,7 @@
                             required=""
                             v-model="form.artist"
                         />
-                        Insert artist dropdown here: {{ artists }}
-                        <br />
+                        <!-- Insert artist dropdown here: {{ artists }} -->
                         <label
                             class="pt-3 block font-medium text-lg text-gray-700"
                             for="genre"

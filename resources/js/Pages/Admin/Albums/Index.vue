@@ -16,7 +16,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                View and Edit Albums
+                View and Add Albums
             </h2>
         </template>
 
