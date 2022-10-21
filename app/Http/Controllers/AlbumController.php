@@ -18,7 +18,7 @@ class AlbumController extends Controller
                     'title' => $albums->title,
                     'artist' => $albums->artist->name,
                     'genre' => $albums->genre,
-                    'artwork' => asset("storage/" . $albums->artwork),
+                    'artwork' => asset("storage/artwork/" . $albums->artwork),
                 ];
             }),
             //Provides a prop containing all artist names to be used when adding new albums. 
@@ -37,9 +37,9 @@ class AlbumController extends Controller
 
         if ($request->hasFile('artwork')) {
 
-            $destination_path = 'artwork';
+            $destination_path = 'Artwork';
             $artwork = $request->file('artwork');
-            $artwork_name = $request->title . ' by ' . $request->artist;
+            $artwork_name = $request->title . '-' . $request->artist . '.jpeg';
             $path = $request->file('artwork')->storeAs($destination_path, $artwork_name, 'public');
 
             $input['artwork'] = $artwork_name;

@@ -69,7 +69,7 @@ const props = defineProps({
                                             {{ album.genre }}
                                         </td>
                                         <td class="flex justify-end py-4 px-6">
-                                            <img :src="album.artwork">
+                                            <img class="h-20 w-20" :src="album.artwork" :alt="album.title+' by '+album.artist">
                                         </td>
                                     </tr>
                                 </tbody>
