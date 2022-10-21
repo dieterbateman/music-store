@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            AdminSeeder::class
+            AdminSeeder::class,
+            ArtistSeeder::class,
+            AlbumSeeder::class
         ]);
     }
 }

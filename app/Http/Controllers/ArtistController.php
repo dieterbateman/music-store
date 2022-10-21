@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\artists;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 
@@ -18,10 +19,11 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Admin/Artists/Home',[
-            'artists'=>Artist::all()->map(function($artist){
+        return Inertia::render('Admin/Artists/Index', [
+            'artists' => Artist::all()->map(function ($artist) {
                 return [
-                    'name'=>$artist->name
+                    'id' => $artist->id,
+                    'name' => $artist->name
                 ];
             })
         ]);
@@ -34,7 +36,6 @@ class ArtistController extends Controller
      */
     public function create()
     {
-        
     }
 
     /**
@@ -45,9 +46,11 @@ class ArtistController extends Controller
      */
     public function store(Request $request)
     {
-        Artist::create([
-            'name'=>$request->name
+        //Create new artist only if it doesnt exist
+        Artist::firstOrCreate([
+            'name' => $request->name
         ]);
+        //No feedback to user indicating artist exists
     }
 
     /**
@@ -67,9 +70,8 @@ class ArtistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
     }
 
     /**
@@ -81,7 +83,8 @@ class ArtistController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Using Primary Key 'id' however 'artist' is unique and will give error if theres a duplicate
+        Artist::where('id', $id)->update($request->all());
     }
 
     /**
@@ -90,8 +93,8 @@ class ArtistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Artist $artist)
     {
-        //
+        $artist->delete();
     }
 }

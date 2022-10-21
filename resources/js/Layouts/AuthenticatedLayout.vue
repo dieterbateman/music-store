@@ -33,6 +33,9 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink v-if="$page.props.auth.user.is_admin" :href="route('artists.index')" :active="route().current('artists.index')" >
                                     Artists
                                 </NavLink>
+                                <NavLink v-if="$page.props.auth.user.is_admin" :href="route('albums.index')" :active="route().current('albums.index')" >
+                                    Albums
+                                </NavLink>
                             </div>
                         </div>
 
