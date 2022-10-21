@@ -124,7 +124,7 @@ export default {
             form.name = null;
         });
         function destroyArtist(id) {
-            if (confirm("Are you sure you want to partake in cancel culture?")) {
+            if (confirm("Are you sure?")) {
                 Inertia.delete(route("artists.destroy", id));
             }
         }
