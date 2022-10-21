@@ -39,7 +39,8 @@ class AlbumController extends Controller
 
             $destination_path = 'Artwork';
             $artwork = $request->file('artwork');
-            $artwork_name = $request->title . '-' . $request->artist . '.jpeg';
+            $artwork_name = $request->title . ' by ' . $request->artist . '.jpeg';
+            //using only jpeg for now
             $path = $request->file('artwork')->storeAs($destination_path, $artwork_name, 'public');
 
             $input['artwork'] = $artwork_name;

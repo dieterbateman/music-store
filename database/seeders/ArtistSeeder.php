@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Str;
+use Faker\Factory as Faker;
 
 class ArtistSeeder extends Seeder
 {
@@ -16,8 +17,15 @@ class ArtistSeeder extends Seeder
      */
     public function run()
     {
+        // $faker=Faker::create();
+        // foreach(range(1,5) as $value){
+        //     DB::table('artists')->insert([
+        //         'name' => $faker->name,
+        //         'created_at' => now(),
+        //     ]);
+        // }
         DB::table('artists')->insert([
-            'name' => 'Drake',
+            'name' => 'Harry Styles',
             'created_at' => now(),
         ]);
         DB::table('artists')->insert([
@@ -25,7 +33,7 @@ class ArtistSeeder extends Seeder
             'created_at' => now(),
         ]);
         DB::table('artists')->insert([
-            'name' => 'Britney Spears',
+            'name' => 'The Weeknd',
             'created_at' => now(),
         ]);
     }

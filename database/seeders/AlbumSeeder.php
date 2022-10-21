@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class AlbumSeeder extends Seeder
 {
@@ -13,24 +14,28 @@ class AlbumSeeder extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
         DB::table('albums')->insert([
-            'title' => 'The Beginning',
-            'artist_id'=> '1',
-            'genre'=> 'Hip-Hop',
+            'artist_id' => '1',
+            'title' => "Harry's House",            
+            'genre' => 'Pop',
+            'artwork'=>"Harry's House by Harry Styles.jpeg",
             'created_at' => now(),
         ]);
         DB::table('albums')->insert([
-            'title' => 'The End',
-            'artist_id'=> '1',
-            'genre'=> 'Hip-Hop',
+            'artist_id' => '1',
+            'title' => 'Fine Line',           
+            'genre' => 'Pop',
+            'artwork'=>"Fine Line by Harry Styles.jpeg",
             'created_at' => now(),
         ]);
         DB::table('albums')->insert([
-            'title' => 'Another Album',
-            'artist_id'=> '2',
-            'genre'=> 'Pop',
+            'artist_id' => '3',
+            'title' => 'After Hours',          
+            'genre' => 'Pop',
+            'artwork'=>"After Hours by The Weeknd.jpeg",
             'created_at' => now(),
         ]);
     }
