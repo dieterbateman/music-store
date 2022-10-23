@@ -30,26 +30,30 @@
                             for="artist"
                             ><span>Artist:</span></label
                         >
-                        <input
+                        <v-select
                             class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
-                            id="artist"
-                            type="text"
-                            required=""
-                            v-model="form.artist"
-                        />
-                        <!-- Insert artist dropdown here: {{ artists }} -->
+                            label="name"
+                            :options="artists"
+                            v-model="selectedArtist"
+                        ></v-select>
                         <label
                             class="pt-3 block font-medium text-lg text-gray-700"
                             for="genre"
                             ><span>Genre:</span></label
                         >
-                        <input
+                        <v-select
+                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
+                            multiple
+                            :options="genres"
+                            v-model="selectedGenre"
+                        ></v-select>
+                        <!-- <input
                             class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
                             id="genre"
                             type="text"
                             required=""
                             v-model="form.genre"
-                        />
+                        /> -->
                         <label
                             class="pt-3 block font-medium text-lg text-gray-700"
                             for="artwork"
@@ -69,7 +73,10 @@
                                 type="submit"
                                 class="button hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 mt-3"
                                 v-if="form.title && isNewAlbum"
-                                @click="form.post(route('albums.store')); clearForm()"
+                                @click="
+                                    form.post(route('albums.store'));
+                                    clearForm();
+                                "
                             >
                                 Submit
                             </button>
@@ -121,6 +128,8 @@ import { ref, watch } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 export default {
     props: {
@@ -134,6 +143,7 @@ export default {
     },
     components: {
         Link,
+        vSelect,
     },
 
     setup() {
@@ -145,6 +155,35 @@ export default {
         });
         const isModalOpen = ref(false);
         const modal = ref(null);
+        const selectedArtist = ref(null);
+        const selectedGenre = ref(null);
+        const genres = ref([
+            "Ambient",
+            "Classical",
+            "Country",
+            "Disco",
+            "EDM",
+            "Folk",
+            "Funk",
+            "Gospel",
+            "Grime",
+            "Grunge",
+            "Heavy Metal",
+            "Hip-Hop & Rap",
+            "House",
+            "Indie Rock",
+            "Jazz",
+            "Latin Music",
+            "Pop",
+            "Psychedelic Rock",
+            "Punk Rock",
+            "R&B",
+            "Reggae",
+            "Rock",
+            "Soul",
+            "Techno",
+            "Trap",
+        ]);
 
         onClickOutside(modal, function () {
             clearForm();
@@ -167,6 +206,23 @@ export default {
             form.artwork.value = e.form.artwork[0];
         }
 
+        watch(selectedArtist, function (selectedArtist) {
+            form.artist = selectedArtist.name;
+        });
+        watch(selectedGenre, function (selectedGenre) {
+            var multipleGenres = Object.values(selectedGenre);
+            var stringOfGenres=multipleGenres.toString();
+            form.genre = stringOfGenres;
+        });
+
+        //         if(Object.keys(selectedGenre).length>1){
+        //     console.log(JSON.stringify(Object.values(selectedGenre)));
+        //     var multipleGenres=JSON.stringify(Object.values(selectedGenre))
+        // } else{
+        //     console.log(selectedGenre)
+        //     form.genre = selectedGenre;
+        // }
+
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
                 document.documentElement.style.overflow = "hidden";
@@ -180,6 +236,9 @@ export default {
             destroyArtist,
             clearForm,
             updateArtwork,
+            selectedArtist,
+            selectedGenre,
+            genres,
         };
     },
 };
