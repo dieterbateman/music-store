@@ -2,7 +2,7 @@
     <div class="root">
         <div class="flex justify-end">
             <button
-                class="button hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 ml-4"
+                class="button btnGrey ml-4"
                 v-if="isNewAlbum"
                 @click="isModalOpen = true"
             >
@@ -14,53 +14,49 @@
                 <div ref="modal">
                     <form autocomplete="off" @submit.prevent="clearForm()">
                         <label
-                            class="pt-3 block font-medium text-lg text-gray-700"
+                            class="txtLabel"
                             for="title"
                             ><span>Title:</span></label
                         >
                         <input
-                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
+                            class="txtInput"
                             id="title"
                             type="text"
                             required=""
                             v-model="form.title"
                         />
+
                         <label
-                            class="pt-3 block font-medium text-lg text-gray-700"
+                            class="txtLabel"
                             for="artist"
                             ><span>Artist:</span></label
                         >
                         <v-select
-                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
+                            class="txtInput"
                             label="name"
                             :options="artists"
                             v-model="selectedArtist"
                         ></v-select>
+                        
                         <label
-                            class="pt-3 block font-medium text-lg text-gray-700"
+                            class="txtLabel"
                             for="genre"
                             ><span>Genre:</span></label
                         >
                         <v-select
-                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
+                            class="txtInput"
                             multiple
                             :options="genres"
                             v-model="selectedGenre"
                         ></v-select>
-                        <!-- <input
-                            class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
-                            id="genre"
-                            type="text"
-                            required=""
-                            v-model="form.genre"
-                        /> -->
+                        
                         <label
-                            class="pt-3 block font-medium text-lg text-gray-700"
+                            class="txtLabel"
                             for="artwork"
                             ><span>Artwork:</span></label
                         >
                         <input
-                            class="px-1 py-1 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-5 rounded-md shadow-sm mt-1 block w-full"
+                            class="px-1 py-1 txtInput"
                             id="artwork"
                             type="file"
                             name="artwork"
@@ -71,7 +67,7 @@
                         <div class="pt-2">
                             <button
                                 type="submit"
-                                class="button hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 mt-3"
+                                class="button btnGrey"
                                 v-if="form.title && isNewAlbum"
                                 @click="
                                     form.post(route('albums.store'));
@@ -82,7 +78,7 @@
                             </button>
                             <button
                                 type="submit"
-                                class="button hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 mt-3"
+                                class="button btnGrey"
                                 v-if="form.title != title && !isNewAlbum"
                                 @click="
                                     form.put(
@@ -96,9 +92,9 @@
                                 Update
                             </button>
 
-                            <button
+                            <!-- <button
                                 type="submit"
-                                class="button deleteButton hover:bg-red-700 active:bg-red-900 focus:outline-none focus:border-red-900 focus:shadow-outline-gray transition ease-in-out duration-150 mt-3"
+                                class="button deleteButton"
                                 v-if="
                                     !isNewAlbum &&
                                     form.title != null &&
@@ -107,10 +103,10 @@
                                 @click="destroyArtist(id)"
                             >
                                 Delete
-                            </button>
+                            </button> -->
 
                             <button
-                                class="button float-right hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150 mt-3"
+                                class="button btnGrey float-right"
                                 @click="clearForm()"
                             >
                                 Close
@@ -209,19 +205,14 @@ export default {
         watch(selectedArtist, function (selectedArtist) {
             form.artist = selectedArtist.name;
         });
+
+        //Formatting data here in frontend since it requires very little computational power
         watch(selectedGenre, function (selectedGenre) {
             var multipleGenres = Object.values(selectedGenre);
             var stringOfGenres=multipleGenres.toString();
-            form.genre = stringOfGenres;
+            var selectedGenres=stringOfGenres.replace(/,/g, ', ')
+            form.genre = selectedGenres;
         });
-
-        //         if(Object.keys(selectedGenre).length>1){
-        //     console.log(JSON.stringify(Object.values(selectedGenre)));
-        //     var multipleGenres=JSON.stringify(Object.values(selectedGenre))
-        // } else{
-        //     console.log(selectedGenre)
-        //     form.genre = selectedGenre;
-        // }
 
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
