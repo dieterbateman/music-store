@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use App\Models\artists;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -84,7 +86,10 @@ class ArtistController extends Controller
     public function update(Request $request, $id)
     {
         //Using Primary Key 'id' however 'artist' is unique and will give error if theres a duplicate
+        $oldName=Artist::where('id',$id)->pluck('name')->toArray();
+        Storage::move('/public/artwork/'. implode($oldName),  '/public/artwork/'. $request->name);
         Artist::where('id', $id)->update($request->all());
+        
     }
 
     /**
@@ -96,5 +101,7 @@ class ArtistController extends Controller
     public function destroy(Artist $artist)
     {
         $artist->delete();
+        $directory='/public/artwork/'. $artist->name;
+        Storage::deleteDirectory($directory); //remove artist folder containing all artwork
     }
 }
