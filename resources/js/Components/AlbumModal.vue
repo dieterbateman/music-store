@@ -12,10 +12,12 @@
         <teleport to="body">
             <div class="modal" v-if="isModalOpen">
                 <div ref="modal">
-                    <form autocomplete="off" @submit.prevent="clearForm()">
-                        <label
-                            class="txtLabel"
-                            for="title"
+                    <form
+                        id="modalForm"
+                        autocomplete="off"
+                        @submit.prevent="clearForm()"
+                    >
+                        <label class="txtLabel" for="title"
                             ><span>Title:</span></label
                         >
                         <input
@@ -26,9 +28,7 @@
                             v-model="form.title"
                         />
 
-                        <label
-                            class="txtLabel"
-                            for="artist"
+                        <label class="txtLabel" for="artist"
                             ><span>Artist:</span></label
                         >
                         <v-select
@@ -37,10 +37,8 @@
                             :options="artists"
                             v-model="selectedArtist"
                         ></v-select>
-                        
-                        <label
-                            class="txtLabel"
-                            for="genre"
+
+                        <label class="txtLabel" for="genre"
                             ><span>Genre:</span></label
                         >
                         <v-select
@@ -49,10 +47,8 @@
                             :options="genres"
                             v-model="selectedGenre"
                         ></v-select>
-                        
-                        <label
-                            class="txtLabel"
-                            for="artwork"
+
+                        <label class="txtLabel" for="artwork"
                             ><span>Artwork:</span></label
                         >
                         <input
@@ -71,7 +67,6 @@
                                 v-if="form.title && isNewAlbum"
                                 @click="
                                     form.post(route('albums.store'));
-                                    clearForm();
                                 "
                             >
                                 Submit
@@ -86,7 +81,7 @@
                                             id: id,
                                             title: title,
                                         })
-                                    )
+                                    );
                                 "
                             >
                                 Update
@@ -107,7 +102,9 @@
 
                             <button
                                 class="button btnGrey float-right"
-                                @click="clearForm()"
+                                @click="
+                                    clearForm();
+                                "
                             >
                                 Close
                             </button>
@@ -190,12 +187,8 @@ export default {
             form.title = null;
             form.genre = null;
             form.artist = null;
-        }
-
-        function destroyArtist(id) {
-            if (confirm("Are you sure?")) {
-                Inertia.delete(route("artists.destroy", id));
-            }
+            console.log("trying to clear form");
+            form.get(route('albums.index'));
         }
 
         function updateArtwork(e) {
@@ -203,28 +196,32 @@ export default {
         }
 
         watch(selectedArtist, function (selectedArtist) {
-            form.artist = selectedArtist.name;
+            if (selectedArtist === null) {
+                form.artist = selectedArtist;
+            } else {
+                form.artist = selectedArtist.name;
+            }
         });
 
         //Formatting data here in frontend since it requires very little computational power
         watch(selectedGenre, function (selectedGenre) {
             var multipleGenres = Object.values(selectedGenre);
-            var stringOfGenres=multipleGenres.toString();
-            var selectedGenres=stringOfGenres.replace(/,/g, ', ')
+            var stringOfGenres = multipleGenres.toString();
+            var selectedGenres = stringOfGenres.replace(/,/g, ", ");
             form.genre = selectedGenres;
         });
 
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
                 document.documentElement.style.overflow = "hidden";
+            } else {
+                document.documentElement.style.overflow = "auto";
             }
-            document.documentElement.style.overflow = "auto";
         });
         return {
             isModalOpen,
             modal,
             form,
-            destroyArtist,
             clearForm,
             updateArtwork,
             selectedArtist,
