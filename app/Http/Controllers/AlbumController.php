@@ -15,6 +15,7 @@ class AlbumController extends Controller
         return Inertia::render('Admin/Albums/Index', [
             'albums' => Album::all()->map(function ($albums) {
                 return [
+                    'id' => $albums->id,
                     'title' => $albums->title,
                     'artist' => $albums->artist->name,
                     'genre' => $albums->genre,
@@ -59,5 +60,6 @@ class AlbumController extends Controller
                 ]
             );
         }
+        return Redirect::route('albums.index');
     }
 }

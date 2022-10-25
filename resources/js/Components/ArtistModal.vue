@@ -130,6 +130,7 @@ export default {
         }
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
+                window.scrollTo(0,0);
                 document.documentElement.style.overflow = "hidden";
             }
             document.documentElement.style.overflow = "auto";

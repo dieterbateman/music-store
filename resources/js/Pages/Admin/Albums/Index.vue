@@ -5,9 +5,8 @@ import AlbumModal from "@/Components/AlbumModal.vue";
 
 const props = defineProps({
     albums: Object,
-    artists: Object
+    artists: Object,
 });
-
 </script>
 
 <template>
@@ -24,7 +23,10 @@ const props = defineProps({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <album-modal isNewAlbum :artists="artists"></album-modal>
+                        <album-modal
+                            isNewAlbum
+                            :artists="artists"
+                        ></album-modal>
                         <br />
                         <div
                             class="overflow-x-auto relative shadow-md sm:rounded-lg"
@@ -37,6 +39,9 @@ const props = defineProps({
                                 >
                                     <tr>
                                         <th scope="col" class="py-3 px-6">
+                                            Artwork
+                                        </th>
+                                        <th scope="col" class="py-3 px-6">
                                             Album Title
                                         </th>
                                         <th scope="col" class="py-3 px-6">
@@ -45,8 +50,8 @@ const props = defineProps({
                                         <th scope="col" class="py-3 px-6">
                                             Genre
                                         </th>
-                                        <th scope="col" class="flex justify-end py-3 px-6">
-                                            Artwork
+                                        <th scope="col" class="py-3 px-6">
+                                            Action
                                         </th>
                                     </tr>
                                 </thead>
@@ -56,6 +61,17 @@ const props = defineProps({
                                         :key="album.id"
                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                                     >
+                                        <td class="py-4 px-6">
+                                            <img
+                                                class="h-16 w-16"
+                                                :src="album.artwork"
+                                                :alt="
+                                                    album.title +
+                                                    ' by ' +
+                                                    album.artist
+                                                "
+                                            />
+                                        </td>
                                         <th
                                             scope="row"
                                             class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -68,8 +84,13 @@ const props = defineProps({
                                         <td class="py-4 px-6">
                                             {{ album.genre }}
                                         </td>
-                                        <td class="flex justify-end py-4 px-6">
-                                            <img class="h-20 w-20" :src="album.artwork" :alt="album.title+' by '+album.artist">
+                                        <td class="py-4 px-6">
+                                            <Link
+                                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                                :href="`songs/${album.id}`"
+                                            >
+                                                Songs
+                                            </Link>
                                         </td>
                                     </tr>
                                 </tbody>

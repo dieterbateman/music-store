@@ -64,41 +64,13 @@
                             <button
                                 type="submit"
                                 class="button btnGrey"
-                                v-if="form.title && isNewAlbum"
+                                v-if="isNewAlbum"
                                 @click="
                                     form.post(route('albums.store'));
                                 "
                             >
                                 Submit
                             </button>
-                            <button
-                                type="submit"
-                                class="button btnGrey"
-                                v-if="form.title != title && !isNewAlbum"
-                                @click="
-                                    form.put(
-                                        route('artists.update', {
-                                            id: id,
-                                            title: title,
-                                        })
-                                    );
-                                "
-                            >
-                                Update
-                            </button>
-
-                            <!-- <button
-                                type="submit"
-                                class="button deleteButton"
-                                v-if="
-                                    !isNewAlbum &&
-                                    form.title != null &&
-                                    form.title === title
-                                "
-                                @click="destroyArtist(id)"
-                            >
-                                Delete
-                            </button> -->
 
                             <button
                                 class="button btnGrey float-right"
@@ -184,11 +156,7 @@ export default {
 
         function clearForm() {
             isModalOpen.value = false;
-            form.title = null;
-            form.genre = null;
-            form.artist = null;
-            console.log("trying to clear form");
-            form.get(route('albums.index'));
+            // form.get(route('albums.index'));
         }
 
         function updateArtwork(e) {
@@ -213,6 +181,7 @@ export default {
 
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
+                window.scrollTo(0,0);
                 document.documentElement.style.overflow = "hidden";
             } else {
                 document.documentElement.style.overflow = "auto";

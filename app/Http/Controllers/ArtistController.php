@@ -52,7 +52,7 @@ class ArtistController extends Controller
         Artist::firstOrCreate([
             'name' => $request->name
         ]);
-        //No feedback to user indicating artist exists
+        //If artist already exist the user wont receive any feedback and there will be an error
     }
 
     /**
@@ -87,7 +87,8 @@ class ArtistController extends Controller
     {
         //Using Primary Key 'id' however 'artist' is unique and will give error if theres a duplicate
         $oldName=Artist::where('id',$id)->pluck('name')->toArray();
-        Storage::move('/public/artwork/'. implode($oldName),  '/public/artwork/'. $request->name);
+        Storage::move('/public/artwork/'. implode($oldName), '/public/artwork/'. $request->name); //Update storage directory with new artist name
+        //File name is not updated with new artist name
         Artist::where('id', $id)->update($request->all());
         
     }
@@ -102,6 +103,6 @@ class ArtistController extends Controller
     {
         $artist->delete();
         $directory='/public/artwork/'. $artist->name;
-        Storage::deleteDirectory($directory); //remove artist folder containing all artwork
+        Storage::deleteDirectory($directory); //Remove the artist folder containing all artwork
     }
 }
