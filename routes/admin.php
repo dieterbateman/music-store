@@ -13,6 +13,7 @@ Route::middleware('auth', 'is_admin')->prefix('admin')->group(function () {
         'index', 'store','update', 'destroy'
     ]);
     Route::get('/songs/{album}', [SongController::class, 'show'])->name('songs.show');
+    Route::post('/songs/{album}', [SongController::class, 'store'])->name('songs.store');
 });
 
 

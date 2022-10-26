@@ -1,14 +1,3 @@
-<script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import AlbumModal from "@/Components/AlbumModal.vue";
-
-const props = defineProps({
-    albums: Object,
-    artists: Object,
-});
-</script>
-
 <template>
     <Head title="Admin" />
 
@@ -24,7 +13,6 @@ const props = defineProps({
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <album-modal
-                            isNewAlbum
                             :artists="artists"
                         ></album-modal>
                         <br />
@@ -42,7 +30,7 @@ const props = defineProps({
                                             Artwork
                                         </th>
                                         <th scope="col" class="py-3 px-6">
-                                            Album Title
+                                            Title
                                         </th>
                                         <th scope="col" class="py-3 px-6">
                                             Artist
@@ -85,12 +73,18 @@ const props = defineProps({
                                             {{ album.genre }}
                                         </td>
                                         <td class="py-4 px-6">
-                                            <Link
+                                            <button
                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                                :href="`songs/${album.id}`"
+                                                @click="
+                                                    Inertia.get(
+                                                        route('songs.show', {
+                                                            album: album.id,
+                                                        })
+                                                    )
+                                                "
                                             >
                                                 Songs
-                                            </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -102,3 +96,16 @@ const props = defineProps({
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import AlbumModal from "@/Components/AlbumModal.vue";
+import { Inertia } from "@inertiajs/inertia";
+
+
+const props = defineProps({
+    albums: Object,
+    artists: Object,
+});
+</script>

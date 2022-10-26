@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
-use App\Models\Artist;
 use App\Models\Song;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class SongController extends Controller
@@ -33,6 +34,28 @@ class SongController extends Controller
             'songs' => $songs_info,
             'album' => $album_info
         ]);
-        
+    }
+
+    public function store(Request $request, $id)
+    {
+        //$image=Request::file('artwork')->store('artwork', 'public');
+
+        if ($request->hasFile('song')) {
+
+            $destination_path = 'private/Music/' . $request->artist . '/' . $request->albumTitle;
+            $song = $request->file('song');
+            $song_name = $request->title . '.' . $song->getClientOriginalExtension();
+            //using only jpeg for now
+            $path = $song->storeAs($destination_path, $song_name, 'local');
+
+            $input['song'] = $song_name;
+        }
+        Song::Create(
+            [
+                'album_id' => $id,
+                'title' => $request->title,
+            ]
+        );
+        return Redirect::route('songs.show',[$id]);
     }
 }
