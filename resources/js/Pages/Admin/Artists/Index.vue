@@ -1,14 +1,3 @@
-<script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import ArtistModal from "@/Components/ArtistModal.vue";
-
-const props = defineProps({
-    artists: Object,
-});
-
-</script>
-
 <template>
     <Head title="Admin" />
 
@@ -38,7 +27,10 @@ const props = defineProps({
                                         <th scope="col" class="py-3 px-6">
                                             Artist Name
                                         </th>
-                                        <th scope="col" class="flex justify-end py-3 px-6">
+                                        <th
+                                            scope="col"
+                                            class="flex justify-end py-3 px-6"
+                                        >
                                             Action
                                         </th>
                                     </tr>
@@ -56,7 +48,10 @@ const props = defineProps({
                                             {{ artist.name }}
                                         </th>
                                         <td class="py-4 px-6">
-                                            <artist-modal class="items-center content-center" :isNewArtist="false" :id="artist.id" :name="artist.name"></artist-modal>
+                                            <artist-modal
+                                                :isNewArtist="false"
+                                                :artist="artist"
+                                            ></artist-modal>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -68,3 +63,13 @@ const props = defineProps({
         </div>
     </AuthenticatedLayout>
 </template>
+
+<script setup>
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import ArtistModal from "@/Components/ArtistModal.vue";
+
+const props = defineProps({
+    artists: Object,
+});
+</script>

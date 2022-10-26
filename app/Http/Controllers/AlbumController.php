@@ -22,7 +22,6 @@ class AlbumController extends Controller
                     'artwork' => asset("storage/artwork/". $albums->artist->name ."/". $albums->artwork),
                 ];
             }),
-            //Provides a prop containing all artist names to be used when adding new albums. 
             'artists' => Artist::all()->map(function ($artist) {
                 return [
                     'id' => $artist->id,
@@ -34,17 +33,14 @@ class AlbumController extends Controller
 
     public function store(Request $request)
     {
-        //$image=Request::file('artwork')->store('artwork', 'public');
-
         if ($request->hasFile('artwork')) {
 
             $destination_path = 'Artwork/'. $request->artist;
             $artwork = $request->file('artwork');
-            $artwork_name = $request->title . ' by ' . $request->artist . '.jpeg';
-            //using only jpeg for now
-            $path = $request->file('artwork')->storeAs($destination_path, $artwork_name, 'public');
-
-            $input['artwork'] = $artwork_name;
+            $artwork_name = $request->title . ' by ' . $request->artist .'.'.$artwork->getClientOriginalExtension();
+            $path = $artwork->storeAs($destination_path, $artwork_name, 'public');
+        } else {
+            $artwork_name=null;
         }
 
         //Get artist id
@@ -60,6 +56,7 @@ class AlbumController extends Controller
                 ]
             );
         }
-        return Redirect::route('albums.index');
+        
+        //return Redirect::route('albums.index');
     }
 }

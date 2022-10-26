@@ -2,7 +2,7 @@
     <div class="root">
         <div class="flex justify-end">
             <button
-                class="button btnGrey ml-4"
+                class="button btnGrey"
                 v-if="isNewArtist"
                 @click="isModalOpen = true"
             >
@@ -13,7 +13,7 @@
                 v-else-if="!isNewArtist"
                 @click="
                     isModalOpen = true;
-                    form.name = name;
+                    form.name = artist?.name;
                 "
             >
                 Edit
@@ -22,23 +22,15 @@
         <teleport to="body">
             <div class="modal" v-if="isModalOpen">
                 <div ref="modal">
-                    <form
-                        autocomplete="off"
-                        @submit.prevent="
-                            form.name = null;
-                            isModalOpen = false;
-                        "
-                    >
-                        <label
-                            class="txtLabel"
-                            for="name"
+                    <form autocomplete="off" @submit.prevent="clearForm()">
+                        <label class="txtLabel" for="name"
                             ><span>Artist Name:</span></label
                         >
                         <input
                             class="txtInput"
                             id="name"
                             type="text"
-                            required=""
+                            required
                             v-model="form.name"
                         />
 
@@ -47,22 +39,15 @@
                                 type="submit"
                                 class="button btnGrey"
                                 v-if="form.name && isNewArtist"
-                                @click="form.post(route('artists.store'))"
+                                @click="submit(true)"
                             >
                                 Submit
                             </button>
                             <button
                                 type="submit"
                                 class="button btnGrey"
-                                v-if="form.name != name && !isNewArtist"
-                                @click="
-                                    form.put(
-                                        route('artists.update', {
-                                            id: id,
-                                            name: name,
-                                        })
-                                    )
-                                "
+                                v-if="form.name != artist?.name && !isNewArtist"
+                                @click="submit(false)"
                             >
                                 Update
                             </button>
@@ -73,19 +58,17 @@
                                 v-if="
                                     !isNewArtist &&
                                     form.name != null &&
-                                    form.name === name
+                                    form.name === artist?.name
                                 "
-                                @click="destroyArtist(id)"
+                                @click="destroyArtist(artist?.id)"
                             >
                                 Delete
                             </button>
 
                             <button
+                                type="button"
                                 class="button btnGrey float-right"
-                                @click="
-                                    isModalOpen = false;
-                                    form.name = null;
-                                "
+                                @click="clearForm()"
                             >
                                 Close
                             </button>
@@ -98,7 +81,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, reactive } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
@@ -106,45 +89,57 @@ import { Inertia } from "@inertiajs/inertia";
 export default {
     props: {
         isNewArtist: Boolean,
-        id: Number,
-        name: String,
-    },
-    components: {
-        Link,
+        artist: Object,
     },
 
-    setup() {
+    setup(props) {
         const form = useForm({
             name: null,
         });
-        const isModalOpen = ref(false);
-        const modal = ref(null);
-        onClickOutside(modal, function () {
+        function clearForm() {
             isModalOpen.value = false;
             form.name = null;
-        });
-        function destroyArtist(id) {
-            if (confirm("Are you sure you want to partake in cancel culture?")) {
-                Inertia.delete(route("artists.destroy", id));
-            }
         }
+
+        const isModalOpen = ref(false);
+        const modal = ref(null);
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
-                window.scrollTo(0,0);
+                window.scrollTo(0, 0);
                 document.documentElement.style.overflow = "hidden";
             }
             document.documentElement.style.overflow = "auto";
         });
+        onClickOutside(modal, function () {
+            clearForm();
+        });
+
+        function submit(isNew) {
+            if (isNew) {
+                form.post(route("artists.store"));
+            } else if (!isNew) {
+                form.put(route("artists.update", { artist: props.artist.id }));
+            }
+        }
+
+        function destroyArtist(id) {
+            if (
+                confirm("Are you sure you want to partake in cancel culture?")
+            ) {
+                Inertia.delete(route("artists.destroy", id));
+            }
+        }
+
         return {
             isModalOpen,
             modal,
             form,
+            clearForm,
             destroyArtist,
+            submit,
         };
     },
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

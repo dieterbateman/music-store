@@ -1,22 +1,14 @@
 <template>
     <div class="root">
         <div class="flex justify-end">
-            <button
-                class="button btnGrey ml-4"
-                v-if="isNewAlbum"
-                @click="isModalOpen = true"
-            >
+            <button class="button btnGrey" @click="isModalOpen = true">
                 New Album
             </button>
         </div>
         <teleport to="body">
             <div class="modal" v-if="isModalOpen">
                 <div ref="modal">
-                    <form
-                        id="modalForm"
-                        autocomplete="off"
-                        @submit.prevent="clearForm()"
-                    >
+                    <form autocomplete="off" v-on:submit="clearForm()">
                         <label class="txtLabel" for="title"
                             ><span>Title:</span></label
                         >
@@ -24,14 +16,22 @@
                             class="txtInput"
                             id="title"
                             type="text"
-                            required=""
+                            required
                             v-model="form.title"
                         />
 
                         <label class="txtLabel" for="artist"
                             ><span>Artist:</span></label
                         >
+                        <!-- <select v-model="form.artist" class="txtInput" name="artist" id="artist">
+                            <option disabled selected value> -- select an artist -- </option>
+                            <option v-for="artist in artists" :key="artist.id">
+                                {{ artist.name }}
+                            </option>
+                        </select> -->
+
                         <v-select
+                            id="artist"
                             class="txtInput"
                             label="name"
                             :options="artists"
@@ -42,9 +42,10 @@
                             ><span>Genre:</span></label
                         >
                         <v-select
+                            id="genre"
                             class="txtInput"
                             multiple
-                            :options="genres"
+                            :options="genreList"
                             v-model="selectedGenre"
                         ></v-select>
 
@@ -56,27 +57,23 @@
                             id="artwork"
                             type="file"
                             name="artwork"
-                            required=""
                             v-on:change="form.artwork = $event.target.files[0]"
                         />
 
                         <div class="pt-2">
                             <button
-                                type="submit"
+                                type="button"
                                 class="button btnGrey"
-                                v-if="isNewAlbum"
-                                @click="
-                                    form.post(route('albums.store'));
-                                "
+                                v-if="form.title && form.artist && form.genre"
+                                @click="submit()"
                             >
                                 Submit
                             </button>
 
                             <button
+                                type="button"
                                 class="button btnGrey float-right"
-                                @click="
-                                    clearForm();
-                                "
+                                @click="clearForm()"
                             >
                                 Close
                             </button>
@@ -98,12 +95,6 @@ import "vue-select/dist/vue-select.css";
 
 export default {
     props: {
-        isNewAlbum: Boolean,
-        id: Number,
-        title: String,
-        genre: String,
-        artist: String,
-        album: Object,
         artists: Object,
     },
     components: {
@@ -111,18 +102,18 @@ export default {
         vSelect,
     },
 
-    setup() {
-        const form = useForm({
+    setup(props) {
+        const isModalOpen = ref(false);
+        const modal = ref(null);
+        var form = useForm({
             title: null,
             artist: null,
             genre: null,
             artwork: null,
         });
-        const isModalOpen = ref(false);
-        const modal = ref(null);
         const selectedArtist = ref(null);
         const selectedGenre = ref(null);
-        const genres = ref([
+        const genreList = ref([
             "Ambient",
             "Classical",
             "Country",
@@ -150,52 +141,51 @@ export default {
             "Trap",
         ]);
 
+        watch(isModalOpen, function (isModalOpen) {
+            if (isModalOpen) {
+                window.scrollTo(0, 0);
+                document.documentElement.style.overflow = "hidden";
+            } else {
+                document.documentElement.style.overflow = "auto";
+            }
+        });
         onClickOutside(modal, function () {
             clearForm();
         });
-
         function clearForm() {
             isModalOpen.value = false;
-            // form.get(route('albums.index'));
+            form.get(route("albums.index"));
         }
 
-        function updateArtwork(e) {
-            form.artwork.value = e.form.artwork[0];
-        }
-
-        watch(selectedArtist, function (selectedArtist) {
-            if (selectedArtist === null) {
-                form.artist = selectedArtist;
-            } else {
-                form.artist = selectedArtist.name;
-            }
-        });
-
-        //Formatting data here in frontend since it requires very little computational power
+        //Sending genres as a string of genres seperated with a comma
         watch(selectedGenre, function (selectedGenre) {
             var multipleGenres = Object.values(selectedGenre);
             var stringOfGenres = multipleGenres.toString();
             var selectedGenres = stringOfGenres.replace(/,/g, ", ");
             form.genre = selectedGenres;
         });
-
-        watch(isModalOpen, function (isModalOpen) {
-            if (isModalOpen) {
-                window.scrollTo(0,0);
-                document.documentElement.style.overflow = "hidden";
-            } else {
-                document.documentElement.style.overflow = "auto";
-            }
+        watch(selectedArtist, function (selectedArtist) {
+            form.artist = selectedArtist?.name;
         });
+
+        function submit() {
+            form.post(route("albums.store"));
+        }
+
+        // function updateArtwork(e) {
+        //     form.artwork.value = e.form.artwork[0];
+        //     console.log('in update artwork');
+        // }
+
         return {
             isModalOpen,
             modal,
             form,
-            clearForm,
-            updateArtwork,
+            genreList,
             selectedArtist,
             selectedGenre,
-            genres,
+            clearForm,
+            submit,
         };
     },
 };
