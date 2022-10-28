@@ -6,6 +6,7 @@ use App\Models\Album;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class SongController extends Controller
@@ -28,6 +29,7 @@ class SongController extends Controller
             return [
                 'id' => $songs->id,
                 'title' => $songs->title,
+                'file'=> asset("storage/private/music/" . $songs->album->artist->name . "/" . $songs->album->title . '/' . $songs->file,),
             ];
         });
         return Inertia::render('Admin/Songs/Index', [
@@ -42,7 +44,7 @@ class SongController extends Controller
 
         if ($request->hasFile('song')) {
 
-            $destination_path = 'private/Music/' . $request->artist . '/' . $request->albumTitle;
+            $destination_path = 'private/music/' . $request->artist . '/' . $request->albumTitle;
             $song = $request->file('song');
             $song_name = $request->title . '.' . $song->getClientOriginalExtension();
             //using only jpeg for now
@@ -54,8 +56,18 @@ class SongController extends Controller
             [
                 'album_id' => $id,
                 'title' => $request->title,
+                'file'=>$song_name,
             ]
         );
         return Redirect::route('songs.show',[$id]);
+    }
+
+    public function access($artist, $album, $file)
+    {
+        $path="/private/music/{$artist}/{$album}/{$file}";
+        if (Storage::exists($path)){
+            return Storage::download($path);
+        }
+        abort(404);
     }
 }

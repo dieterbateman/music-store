@@ -13,7 +13,6 @@
                         autocomplete="off"
                         @submit.prevent="clearForm()"
                     >
-                    {{ album }}
                         <label class="txtLabel" for="title"
                             ><span>Title:</span></label
                         >
@@ -96,9 +95,9 @@ export default {
             form.song = null;
         };
 
-        function updateSongs(e) {
-            form.song.value = e.form.song[0];
-        };
+        // function updateSongs(e) {
+        //     form.song.value = e.form.song[0];
+        // };
 
         watch(isModalOpen, function (isModalOpen) {
             if (isModalOpen) {
@@ -117,7 +116,7 @@ export default {
             modal,
             form,
             clearForm,
-            updateSongs,
+            // updateSongs,
             submit,
         };
     },

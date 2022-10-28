@@ -41,7 +41,10 @@ const props = defineProps({
                                 :href="route('albums.index')"
                                 >Back</Link
                             >
-                            <song-modal :album="album" class="float-right"></song-modal>
+                            <song-modal
+                                :album="album"
+                                class="float-right"
+                            ></song-modal>
                         </div>
                         <div
                             class="overflow-x-auto relative shadow-md sm:rounded-lg"
@@ -55,6 +58,9 @@ const props = defineProps({
                                     <tr>
                                         <th scope="col" class="py-3 px-6">
                                             Songs
+                                        </th>
+                                        <th scope="col" class="py-3 px-6">
+                                            File
                                         </th>
                                     </tr>
                                 </thead>
@@ -81,6 +87,14 @@ const props = defineProps({
                                         >
                                             {{ song.title }}
                                         </th>
+                                        <td
+                                            scope="row"
+                                            class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                        >
+                                            <a class="text-left font-medium text-blue-600 dark:text-blue-500 hover:underline" :href="song.file">
+                                                Download
+                                            </a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
