@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('album_id')->constrained('albums')->onDelete('cascade')->onUpdate('cascade');
             $table->string('title');
+            $table->string('file');
             $table->timestamps();
         });
     }

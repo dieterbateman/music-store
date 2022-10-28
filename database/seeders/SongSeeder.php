@@ -17,32 +17,38 @@ class SongSeeder extends Seeder
     {
         DB::table('songs')->insert([
             'album_id' => '2',
-            'title' => "Album 2 Song 1",            
+            'title' => "Album 2 Song 1",
+            'file' => "Album 2 Song 1.mp3",            
             'created_at' => now(),
         ]);
         DB::table('songs')->insert([
             'album_id' => '2',
-            'title' => "Album 2 Song 2",            
+            'title' => "Album 2 Song 2",
+            'file' => "Album 2 Song 2.mp3",            
             'created_at' => now(),
         ]);
         DB::table('songs')->insert([
             'album_id' => '2',
-            'title' => "Album 2 Song 3",            
+            'title' => "Album 2 Song 3", 
+            'file' => "Album 2 Song 3.mp3",           
             'created_at' => now(),
         ]);
         DB::table('songs')->insert([
             'album_id' => '3',
-            'title' => "Album 3 Song 1",            
+            'title' => "Album 3 Song 1",
+            'file' => "Album 3 Song 1.mp3",            
             'created_at' => now(),
         ]);
         DB::table('songs')->insert([
             'album_id' => '3',
-            'title' => "Album 3 Song 2",            
+            'title' => "Album 3 Song 2",
+            'file' => "Album 3 Song 2.mp3",            
             'created_at' => now(),
         ]);
         DB::table('songs')->insert([
             'album_id' => '3',
-            'title' => "Album 3 Song 3",            
+            'title' => "Album 3 Song 3",
+            'file' => "Album 3 Song 3.mp3",            
             'created_at' => now(),
         ]);
     }

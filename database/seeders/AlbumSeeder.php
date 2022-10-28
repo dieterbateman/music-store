@@ -21,21 +21,21 @@ class AlbumSeeder extends Seeder
             'artist_id' => '1',
             'title' => "Harry's House",            
             'genre' => 'Pop',
-            'artwork'=>"Harry's House by Harry Styles.jpeg",
+            'artwork'=>"Harry's House.jfif",
             'created_at' => now(),
         ]);
         DB::table('albums')->insert([
             'artist_id' => '1',
             'title' => 'Fine Line',           
             'genre' => 'Pop',
-            'artwork'=>"Fine Line by Harry Styles.jpeg",
+            'artwork'=>"Fine Line.jfif",
             'created_at' => now(),
         ]);
         DB::table('albums')->insert([
             'artist_id' => '3',
             'title' => 'After Hours',          
             'genre' => 'Pop',
-            'artwork'=>"After Hours by The Weeknd.jpeg",
+            'artwork'=>"After Hours.jfif",
             'created_at' => now(),
         ]);
     }
