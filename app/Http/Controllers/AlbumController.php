@@ -37,16 +37,15 @@ class AlbumController extends Controller
 
             $destination_path = 'Artwork/'. $request->artist;
             $artwork = $request->file('artwork');
-            $artwork_name = $request->title . ' by ' . $request->artist .'.'.$artwork->getClientOriginalExtension();
+            $artwork_name = $request->title.'.'.$artwork->getClientOriginalExtension();
             $path = $artwork->storeAs($destination_path, $artwork_name, 'public');
         } else {
             $artwork_name=null;
         }
 
         //Get artist id
-        $artist_id = Artist::select('id')->where('name', $request->artist)->get();
-        if ($artist_id) {
-            //Create new album only if it doesnt exist
+        if(Artist::select('id')->where('name', $request->artist)->get()){
+            $artist_id = Artist::select('id')->where('name', $request->artist)->get();
             Album::Create(
                 [
                     'artist_id' => $artist_id[0]->id,
@@ -56,7 +55,6 @@ class AlbumController extends Controller
                 ]
             );
         }
-        
-        //return Redirect::route('albums.index');
+        //no need to redirect as promise will trigger clearForm() which redirects
     }
 }

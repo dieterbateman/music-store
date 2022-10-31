@@ -8,7 +8,11 @@
         <teleport to="body">
             <div class="modal" v-if="isModalOpen">
                 <div ref="modal">
-                    <form autocomplete="off" v-on:submit="clearForm()">
+                    <form
+                        id="formId"
+                        autocomplete="off"
+                        v-on:submit="clearForm()"
+                    >
                         <label class="txtLabel" for="title"
                             ><span>Title:</span></label
                         >
@@ -23,12 +27,6 @@
                         <label class="txtLabel" for="artist"
                             ><span>Artist:</span></label
                         >
-                        <!-- <select v-model="form.artist" class="txtInput" name="artist" id="artist">
-                            <option disabled selected value> -- select an artist -- </option>
-                            <option v-for="artist in artists" :key="artist.id">
-                                {{ artist.name }}
-                            </option>
-                        </select> -->
 
                         <v-select
                             id="artist"
@@ -71,6 +69,7 @@
                             </button>
 
                             <button
+                                id="closeBtn"
                                 type="button"
                                 class="button btnGrey float-right"
                                 @click="clearForm()"
@@ -86,7 +85,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
@@ -101,7 +100,6 @@ export default {
         Link,
         vSelect,
     },
-
     setup(props) {
         const isModalOpen = ref(false);
         const modal = ref(null);
@@ -154,7 +152,7 @@ export default {
         });
         function clearForm() {
             isModalOpen.value = false;
-            form.get(route("albums.index"));
+            Inertia.get(route("albums.index"));
         }
 
         //Sending genres as a string of genres seperated with a comma
@@ -169,13 +167,25 @@ export default {
         });
 
         function submit() {
-            form.post(route("albums.store"));
+            let formdata = new FormData();
+            formdata.append("title", form.title);
+            formdata.append("artist", form.artist);
+            formdata.append("genre", form.genre);
+            formdata.append("artwork", form.artwork);
+            axios
+                .post(route("albums.store"), formdata, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                })
+                .then(function (response) {
+                    // console.log(response);
+                    clearForm();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
-
-        // function updateArtwork(e) {
-        //     form.artwork.value = e.form.artwork[0];
-        //     console.log('in update artwork');
-        // }
 
         return {
             isModalOpen,
