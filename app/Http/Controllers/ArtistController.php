@@ -6,8 +6,7 @@ use App\Models\Artist;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
-
-
+use Illuminate\Support\Facades\Validator;
 
 class ArtistController extends Controller
 {
@@ -25,29 +24,43 @@ class ArtistController extends Controller
 
     public function store(Request $request)
     {
-        //If artist already exist the user wont receive any feedback and there will be an error
-        Artist::firstOrCreate([
+        $request->validate([
+            'name' => 'required|unique:artists|string|max:255'
+        ]);
+        Artist::create([
             'name' => $request->name
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Artist $artist, Request $request)
     {
-        //Update storage with new artist name
-        $oldName = Artist::where('id', $id)->pluck('name')->toArray();
-        Storage::move('/public/artwork/' . implode($oldName), '/public/artwork/' . $request->name);
-        Storage::move('/Music/' . implode($oldName), '/Music/' . $request->name);
-        //Update artist name in db
-        Artist::where('id', $id)->update($request->all());
+        $artwork_directory = '/public/artwork/' . $artist->name;
+        if (Storage::exists($artwork_directory)) {
+            Storage::move($artwork_directory, '/public/artwork/' . $request->name);
+        }
+        //private directory isn't updating correctly
+        $music_directory = '/private/music/' . $artist->name;
+        if (Storage::exists($music_directory)) {
+            Storage::move($music_directory, '/private/music/' . $request->name);
+        }
+
+        //Update artist in db
+        $artist->update($request->all());
     }
 
     public function destroy(Artist $artist)
     {
-        //Remove all directories of artist
         $artwork_directory = '/public/artwork/' . $artist->name;
-        Storage::deleteDirectory($artwork_directory);
-        $music_directory = 'Music/' . $artist->name;
-        Storage::deleteDirectory($music_directory);
+        if (Storage::exists($artwork_directory)) {
+            Storage::deleteDirectory($artwork_directory);
+        }
+
+        //private directory not deleting
+        $music_directory = '/private/music/' . $artist->name;
+        if (Storage::exists($music_directory)) {
+            Storage::deleteDirectory($music_directory);
+        }
+
         //Remove artist from db
         $artist->delete();
     }
