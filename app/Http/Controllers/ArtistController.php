@@ -6,7 +6,6 @@ use App\Models\Artist;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class ArtistController extends Controller
 {
@@ -34,6 +33,9 @@ class ArtistController extends Controller
 
     public function update(Artist $artist, Request $request)
     {
+        $request->validate([
+            'name' => 'required|unique:artists|string|max:255'
+        ]);
         $artwork_directory = '/public/artwork/' . $artist->name;
         if (Storage::exists($artwork_directory)) {
             Storage::move($artwork_directory, '/public/artwork/' . $request->name);
@@ -48,8 +50,11 @@ class ArtistController extends Controller
         $artist->update($request->all());
     }
 
-    public function destroy(Artist $artist)
+    public function destroy(Artist $artist, Request $request)
     {
+        $request->validate([
+            'name' => 'required|exists:artists|string|max:255'
+        ]);
         $artwork_directory = '/public/artwork/' . $artist->name;
         if (Storage::exists($artwork_directory)) {
             Storage::deleteDirectory($artwork_directory);
