@@ -27,7 +27,6 @@
                         <label class="txtLabel" for="artist"
                             ><span>Artist:</span></label
                         >
-
                         <v-select
                             id="artist"
                             class="txtInput"
@@ -62,7 +61,7 @@
                             <button
                                 type="button"
                                 class="button btnGrey"
-                                v-if="form.title && form.artist && form.genre"
+                                v-if="form.title && form.artist && form.genre && form.artwork"
                                 @click="submit()"
                             >
                                 Submit
