@@ -70,17 +70,7 @@ const props = defineProps({
                                         :key="song.id"
                                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                                     >
-                                        <!-- <td class="py-4 px-6">
-                                            <img
-                                                class="h-20 w-20"
-                                                :src="album.artwork"
-                                                :alt="
-                                                    album.title +
-                                                    ' by ' +
-                                                    album.artist
-                                                "
-                                            />
-                                        </td> -->
+
                                         <th
                                             scope="row"
                                             class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"

@@ -7,6 +7,7 @@ use App\Models\Song;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class SongController extends Controller
@@ -29,7 +30,7 @@ class SongController extends Controller
             return [
                 'id' => $songs->id,
                 'title' => $songs->title,
-                'file'=> asset("storage/private/music/" . $songs->album->artist->name . "/" . $songs->album->title . '/' . $songs->file,),
+                'file' => asset("private/music/" . $songs->album->artist->name . "/" .  $songs->file,),
             ];
         });
         return Inertia::render('Admin/Songs/Index', [
@@ -40,32 +41,35 @@ class SongController extends Controller
 
     public function store(Request $request, $id)
     {
-        //$image=Request::file('artwork')->store('artwork', 'public');
-
-        if ($request->hasFile('song')) {
-
-            $destination_path = 'private/music/' . $request->artist . '/' . $request->albumTitle;
-            $song = $request->file('song');
-            $song_name = $request->title . '.' . $song->getClientOriginalExtension();
-            //using only jpeg for now
-            $path = $song->storeAs($destination_path, $song_name, 'local');
-
-            $input['song'] = $song_name;
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'albumTitle' => 'required|exists:albums,title',
+            'song' => 'required|file|mimes:mp4,wav,mp3,aac,wma,flac,m4a'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 400);
         }
+
+        $destination_path = 'private/music/' . $request->artist;
+        $song = $request->file('song');
+        $song_name = $request->albumTitle . ' - ' . $request->title . '.' . $song->getClientOriginalExtension();
+        $song->storeAs($destination_path, $song_name, 'local');
+
+        $input['song'] = $song_name;
         Song::Create(
             [
                 'album_id' => $id,
                 'title' => $request->title,
-                'file'=>$song_name,
+                'file' => $song_name,
             ]
         );
-        return Redirect::route('songs.show',[$id]);
+        return Redirect::route('songs.show', [$id]);
     }
 
-    public function access($artist, $album, $file)
+    public function access($artist, $file)
     {
-        $path="/private/music/{$artist}/{$album}/{$file}";
-        if (Storage::exists($path)){
+        $path = "private/music/{$artist}/{$file}";
+        if (Storage::exists($path)) {
             return Storage::download($path);
         }
         abort(404);
