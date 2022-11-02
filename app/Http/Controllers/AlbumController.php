@@ -31,6 +31,27 @@ class AlbumController extends Controller
         ]);
     }
 
+    public function show()
+    {
+        return Inertia::render('Dashboard', [
+            'albums' => Album::all()->map(function ($albums) {
+                return [
+                    'id' => $albums->id,
+                    'title' => $albums->title,
+                    'artist' => $albums->artist->name,
+                    'genre' => $albums->genre,
+                    'artwork' => asset("storage/artwork/" . $albums->artist->name . "/" . $albums->artwork),
+                ];
+            }),
+            'artists' => Artist::all()->map(function ($artist) {
+                return [
+                    'id' => $artist->id,
+                    'name' => $artist->name
+                ];
+            })
+        ]);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

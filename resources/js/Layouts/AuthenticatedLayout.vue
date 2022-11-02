@@ -28,7 +28,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Music
+                                    Dashboard
                                 </NavLink>
                                 <NavLink v-if="$page.props.auth.user.is_admin" :href="route('artists.index')" :active="route().current('artists.index')" >
                                     Artists
