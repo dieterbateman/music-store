@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Album;
 use App\Models\Artist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
@@ -31,9 +32,9 @@ class AlbumController extends Controller
         ]);
     }
 
-    public function show()
+    public function dashboard_show()
     {
-        return Inertia::render('Dashboard', [
+        return Inertia::render('User/Dashboard', [
             'albums' => Album::all()->map(function ($albums) {
                 return [
                     'id' => $albums->id,
@@ -41,12 +42,6 @@ class AlbumController extends Controller
                     'artist' => $albums->artist->name,
                     'genre' => $albums->genre,
                     'artwork' => asset("storage/artwork/" . $albums->artist->name . "/" . $albums->artwork),
-                ];
-            }),
-            'artists' => Artist::all()->map(function ($artist) {
-                return [
-                    'id' => $artist->id,
-                    'name' => $artist->name
                 ];
             })
         ]);
@@ -58,7 +53,7 @@ class AlbumController extends Controller
             'title' => 'required|string|max:255',
             'artist' => 'required|exists:artists,name',
             'genre' => 'required|string',
-            'artwork' => 'required|image'
+            'artwork' => 'required|image|dimensions:max_width=225,ratio=1/1',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->messages(), 400);
@@ -81,4 +76,5 @@ class AlbumController extends Controller
         );
         //No need to redirect as promise will trigger clearForm() which redirects
     }
+
 }

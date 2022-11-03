@@ -26,10 +26,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', [AlbumController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware('auth', 'verified')->prefix('dashboard')->group(function () {
+    Route::get('/', [AlbumController::class, 'dashboard_show'])->name('dashboard.index');
+    Route::get('/songs/{album}', [SongController::class, 'dashboard_show'])->name('dashboard.songs');
+});
 
-Route::get('/private/music/{artist}/{file}', [SongController::class, 'access'])->middleware(['auth', 'verified'])->name('songs.access');
+Route::get('/private/music/{artist}/{file}', [SongController::class, 'download'])->middleware(['auth', 'verified'])->name('songs.download');
 
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
