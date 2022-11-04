@@ -17,13 +17,6 @@ class ArtistSeeder extends Seeder
      */
     public function run()
     {
-        // $faker=Faker::create();
-        // foreach(range(1,5) as $value){
-        //     DB::table('artists')->insert([
-        //         'name' => $faker->name,
-        //         'created_at' => now(),
-        //     ]);
-        // }
         DB::table('artists')->insert([
             'name' => 'Harry Styles',
             'created_at' => now(),
@@ -36,5 +29,14 @@ class ArtistSeeder extends Seeder
             'name' => 'The Weeknd',
             'created_at' => now(),
         ]);
+        DB::table('artists')->insert([
+            'name' => 'Jonas Blue',
+            'created_at' => now(),
+        ]);
+        DB::table('artists')->insert([
+            'name' => 'Dua Lipa',
+            'created_at' => now(),
+        ]);
+
     }
 }

@@ -20,7 +20,7 @@ class AlbumSeeder extends Seeder
         DB::table('albums')->insert([
             'artist_id' => '1',
             'title' => "Harry's House",            
-            'genre' => 'Pop',
+            'genre' => 'Funk, Pop',
             'artwork'=>"Harry's House.jfif",
             'created_at' => now(),
         ]);
@@ -32,10 +32,38 @@ class AlbumSeeder extends Seeder
             'created_at' => now(),
         ]);
         DB::table('albums')->insert([
+            'artist_id' => '2',
+            'title' => 'Anti',          
+            'genre' => 'Hip-Hop & Rap',
+            'artwork'=>"Anti.jfif",
+            'created_at' => now(),
+        ]);
+        DB::table('albums')->insert([
             'artist_id' => '3',
             'title' => 'After Hours',          
-            'genre' => 'Pop',
+            'genre' => 'Pop, R&B',
             'artwork'=>"After Hours.jfif",
+            'created_at' => now(),
+        ]);
+        DB::table('albums')->insert([
+            'artist_id' => '3',
+            'title' => 'Dawn FM',          
+            'genre' => 'Classical',
+            'artwork'=>"Dawn FM.jfif",
+            'created_at' => now(),
+        ]);
+        DB::table('albums')->insert([
+            'artist_id' => '4',
+            'title' => 'Blue',          
+            'genre' => 'Country',
+            'artwork'=>"Blue.jfif",
+            'created_at' => now(),
+        ]);
+        DB::table('albums')->insert([
+            'artist_id' => '5',
+            'title' => 'Future Nostalgia',          
+            'genre' => 'Jazz, EDM',
+            'artwork'=>"Future Nostalgia.jfif",
             'created_at' => now(),
         ]);
     }
