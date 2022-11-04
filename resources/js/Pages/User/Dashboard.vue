@@ -26,7 +26,7 @@
                                 v-model="searchBy"
                             >
                                 <option value="any" selected>All</option>
-                                <option value="album">Album</option>
+                                <option value="title">Album</option>
                                 <option value="artist">Artist</option>
                                 <option value="genre">Genre</option>
                             </select>
@@ -49,7 +49,7 @@
                                         <option value="genre">Genre</option>
                                     </select>
                                     <button
-                                    class="pr-2"
+                                        class="pr-2"
                                         type="button"
                                         v-if="ascending"
                                         @click="sortAlbums()"
@@ -88,7 +88,7 @@
                                         </svg>
                                     </button>
                                     <button
-                                    class="pr-2"
+                                        class="pr-2"
                                         type="button"
                                         v-if="!ascending"
                                         @click="sortAlbums()"
@@ -174,7 +174,8 @@ export default {
     },
     computed: {
         filteredAlbums() {
-            if (this.searchBy === "any") {
+            var key = this.searchBy;
+            if (key === "any") {
                 return this.allAlbums.filter((album) => {
                     return (
                         album.title
@@ -188,21 +189,9 @@ export default {
                             .includes(this.search.toLowerCase())
                     );
                 });
-            } else if (this.searchBy === "album") {
+            } else {
                 return this.allAlbums.filter((album) => {
-                    return album.title
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            } else if (this.searchBy === "artist") {
-                return this.allAlbums.filter((album) => {
-                    return album.artist
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase());
-                });
-            } else if (this.searchBy === "genre") {
-                return this.allAlbums.filter((album) => {
-                    return album.genre
+                    return album[key]
                         .toLowerCase()
                         .includes(this.search.toLowerCase());
                 });
@@ -211,25 +200,16 @@ export default {
     },
     methods: {
         sortAlbums() {
+            var key = "";
             if (this.sortBy === "artist") {
-                this.ascending
-                    ? this.allAlbums.sort((a, b) =>
-                          a.artist > b.artist ? 1 : -1
-                      )
-                    : this.allAlbums.sort((a, b) =>
-                          a.artist < b.artist ? 1 : -1
-                      );
-                this.ascending = !this.ascending;
+                key = "artist";
             } else if (this.sortBy === "genre") {
-                this.ascending
-                    ? this.allAlbums.sort((a, b) =>
-                          a.genre > b.genre ? 1 : -1
-                      )
-                    : this.allAlbums.sort((a, b) =>
-                          a.genre < b.genre ? 1 : -1
-                      );
-                this.ascending = !this.ascending;
+                key = "genre";
             }
+            this.ascending
+                ? this.allAlbums.sort((a, b) => (a[key] > b[key] ? 1 : -1))
+                : this.allAlbums.sort((a, b) => (a[key] < b[key] ? 1 : -1));
+            this.ascending = !this.ascending;
         },
     },
 };
